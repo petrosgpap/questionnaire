@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Questionnaire</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+}
+
+h1 {
+    margin-top: 100px;
+    font-size: 40px;
+}
+
+.buttons {
+    margin-top: 60px;
+    position: relative;
+}
+
+button {
+    font-size: 22px;
+    padding: 15px 40px;
+    margin: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#yesBtn {
+    background-color: #28a745;
+    color: white;
+}
+
+#noBtn {
+    background-color: #dc3545;
+    color: white;
+    position: absolute;
+}
+
+#result {
+    margin-top: 50px;
+}
+
+img {
+    max-width: 400px;
+    margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Δήμητρα, will you be my Valentine?</h1>
+
+<div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+
+let noBtn = document.getElementById("noBtn");
+let yesBtn = document.getElementById("yesBtn");
+let result = document.getElementById("result");
+
+let moveCount = 0;
+
+// Make NO button move
+noBtn.addEventListener("mouseover", function() {
+    moveCount++;
+
+    let x = Math.random() * (window.innerWidth - 150);
+    let y = Math.random() * (window.innerHeight - 100);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    if (moveCount > 6) {
+        showNoImage();
+    }
+});
+
+// YES clicked
+yesBtn.addEventListener("click", function() {
+    showYesImage();
+});
+
+function showNoImage() {
+    result.innerHTML = `
+        <h2>Don't play with me!</h2>
+        <img src="no_puppy.jpg">
+    `;
+}
+
+function showYesImage() {
+    result.innerHTML = `
+        <h2>Great answer!</h2>
+        <img src="yes_puppy.jpg">
+    `;
+}
+
+</script>
+
+</body>
+</html>
