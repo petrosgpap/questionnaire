@@ -84,7 +84,7 @@ noBtn.addEventListener("mouseover", function() {
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 
-    if (moveCount > 6) {
+    if (moveCount > 3) {
         showNoImage();
     }
 });
@@ -96,14 +96,12 @@ yesBtn.addEventListener("click", function() {
 
 function showNoImage() {
     result.innerHTML = `
-        <h2>Don't play with me!</h2>
         <img src="no_puppy.jpg">
     `;
 }
 
 function showYesImage() {
     result.innerHTML = `
-        <h2>Great answer!</h2>
         <img src="yes_puppy.jpg">
     `;
 }
