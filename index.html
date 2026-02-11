@@ -61,7 +61,7 @@ img {
 
 <div class="buttons">
     <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+    <button id="noBtn" aria-label="No">No</button>
 </div>
 
 <div id="result"></div>
@@ -96,13 +96,13 @@ yesBtn.addEventListener("click", function() {
 
 function showNoImage() {
     result.innerHTML = `
-        <img src="no_puppy.jpg">
+        <img src="no_puppy.jpg" alt="A sad puppy">
     `;
 }
 
 function showYesImage() {
     result.innerHTML = `
-        <img src="yes_puppy.jpg">
+        <img src="yes_puppy.jpg" alt="A happy puppy">
     `;
 }
 
