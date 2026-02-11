@@ -8,30 +8,37 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-color: bisque;
     font-family: Arial, sans-serif;
     text-align: center;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 h1 {
-    margin-top: 100px;
+    margin-top: 80px;
     font-size: 40px;
 }
 
+/* Center buttons properly */
 .buttons {
     margin-top: 60px;
+    display: flex;
+    justify-content: center;   /* Center horizontally */
+    align-items: center;
+    gap: 40px;                 /* Space between buttons */
     position: relative;
 }
 
 button {
     font-size: 22px;
     padding: 15px 40px;
-    margin: 20px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: left 0.2s ease, top 0.2s ease; /* Smooth movement */
+    transition: left 0.25s ease, top 0.25s ease;
+
+    min-width: 140px;
+    min-height: 55px;
 }
 
 #yesBtn {
@@ -42,20 +49,19 @@ button {
 #noBtn {
     background-color: #dc3545;
     color: white;
-    position: absolute;
 }
 
 #result {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
-/* Make images always fit on screen */
 img {
-    max-width: 90vw;      /* Never wider than 90% of screen width */
-    max-height: 60vh;     /* Never taller than 60% of screen height */
+    max-width: 90vw;
+    max-height: 60vh;
     height: auto;
     width: auto;
-    margin-top: 30px;
+    display: block;
+    margin: 20px auto;
 }
 </style>
 </head>
@@ -66,7 +72,7 @@ img {
 
 <div class="buttons">
     <button id="yesBtn">Yes</button>
-    <button id="noBtn" aria-label="No">No</button>
+    <button id="noBtn">No</button>
 </div>
 
 <div id="result"></div>
@@ -78,22 +84,63 @@ let yesBtn = document.getElementById("yesBtn");
 let result = document.getElementById("result");
 
 let moveCount = 0;
+let isFirstMove = true;
 
-// Make NO button move
+/* Overlap detection */
+function isOverlapping(rect1, rect2) {
+    return !(
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom
+    );
+}
+
+/* Move NO button */
 noBtn.addEventListener("mouseover", function() {
+
     moveCount++;
+
+    if (moveCount === 3) {
+        showNoImage();
+    }
+
+    /* On first move, switch to absolute but keep current position */
+    if (isFirstMove) {
+        let rect = noBtn.getBoundingClientRect();
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = rect.left + "px";
+        noBtn.style.top = rect.top + "px";
+
+        isFirstMove = false;
+    }
 
     let buttonWidth = noBtn.offsetWidth;
     let buttonHeight = noBtn.offsetHeight;
 
-    let x = Math.random() * (window.innerWidth - buttonWidth);
-    let y = Math.random() * (window.innerHeight - buttonHeight);
+    let maxX = window.innerWidth - buttonWidth;
+    let maxY = window.innerHeight - buttonHeight;
 
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    let newX, newY;
+    let tries = 0;
+
+    do {
+        newX = Math.random() * maxX;
+        newY = Math.random() * maxY;
+
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+
+        tries++;
+
+        var noRect = noBtn.getBoundingClientRect();
+        var yesRect = yesBtn.getBoundingClientRect();
+
+    } while (isOverlapping(noRect, yesRect) && tries < 100);
 });
 
-// YES clicked
+/* YES click */
 yesBtn.addEventListener("click", function() {
     showYesImage();
 });
