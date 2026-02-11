@@ -8,7 +8,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: bisque;
+    background-color: white;
     font-family: Arial, sans-serif;
     text-align: center;
     overflow: hidden;
@@ -31,6 +31,7 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    transition: left 0.2s ease, top 0.2s ease; /* Smooth movement */
 }
 
 #yesBtn {
@@ -48,10 +49,12 @@ button {
     margin-top: 50px;
 }
 
+/* Make images always fit on screen */
 img {
-    max-width: 100%; /* Adjust to fit within the viewport */
-    height: auto;    /* Maintain aspect ratio */
-    max-height: 70vh; /* Limit height to 70% of viewport height */
+    max-width: 90vw;      /* Never wider than 90% of screen width */
+    max-height: 60vh;     /* Never taller than 60% of screen height */
+    height: auto;
+    width: auto;
     margin-top: 30px;
 }
 </style>
@@ -80,16 +83,14 @@ let moveCount = 0;
 noBtn.addEventListener("mouseover", function() {
     moveCount++;
 
-    // Limit movement range
-    let x = Math.random() * 80 + 10; // Moves within 10 to 90 pixels
-    let y = Math.random() * 40 + 10;  // Moves within 10 to 50 pixels
+    let buttonWidth = noBtn.offsetWidth;
+    let buttonHeight = noBtn.offsetHeight;
+
+    let x = Math.random() * (window.innerWidth - buttonWidth);
+    let y = Math.random() * (window.innerHeight - buttonHeight);
 
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
-
-    if (moveCount > 3) {
-        showNoImage();
-    }
 });
 
 // YES clicked
