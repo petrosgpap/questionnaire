@@ -49,7 +49,9 @@ button {
 }
 
 img {
-    max-width: 400px;
+    max-width: 100%; /* Adjust to fit within the viewport */
+    height: auto;    /* Maintain aspect ratio */
+    max-height: 70vh; /* Limit height to 70% of viewport height */
     margin-top: 30px;
 }
 </style>
@@ -78,8 +80,9 @@ let moveCount = 0;
 noBtn.addEventListener("mouseover", function() {
     moveCount++;
 
-    let x = Math.random() * (window.innerWidth - 150);
-    let y = Math.random() * (window.innerHeight - 100);
+    // Limit movement range
+    let x = Math.random() * 80 + 10; // Moves within 10 to 90 pixels
+    let y = Math.random() * 40 + 10;  // Moves within 10 to 50 pixels
 
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
