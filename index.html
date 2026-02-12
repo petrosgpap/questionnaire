@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
 <meta charset="UTF-8">
-<title>Questionnaire</title>
+<title>Valentine</title>
 
 <style>
 body {
@@ -14,18 +14,22 @@ body {
     overflow-x: hidden;
 }
 
+/* Initially hide main content */
+#mainContent {
+    display: none;
+}
+
 h1 {
     margin-top: 80px;
     font-size: 40px;
 }
 
-/* Center buttons properly */
 .buttons {
     margin-top: 60px;
     display: flex;
-    justify-content: center;   /* Center horizontally */
+    justify-content: center;
     align-items: center;
-    gap: 40px;                 /* Space between buttons */
+    gap: 40px;
     position: relative;
 }
 
@@ -36,11 +40,18 @@ button {
     border-radius: 8px;
     cursor: pointer;
     transition: left 0.25s ease, top 0.25s ease;
-
     min-width: 140px;
     min-height: 55px;
 }
 
+/* Start button style */
+#startBtn {
+    background-color: #28a745;
+    color: white;
+    margin-top: 200px;
+}
+
+/* Yes / No buttons */
 #yesBtn {
     background-color: #28a745;
     color: white;
@@ -68,23 +79,52 @@ img {
 
 <body>
 
-<h1>Δήμητρα, will you be my Valentine?</h1>
+<!-- START BUTTON -->
+<button id="startBtn">Start</button>
 
-<div class="buttons">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+    <h1>Δήμητρα, will you be my Valentine?</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+
+    <div id="result"></div>
+
 </div>
 
-<div id="result"></div>
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="Hawaii.mp3" type="audio/mpeg">
+</audio>
 
 <script>
+
+let startBtn = document.getElementById("startBtn");
+let mainContent = document.getElementById("mainContent");
 
 let noBtn = document.getElementById("noBtn");
 let yesBtn = document.getElementById("yesBtn");
 let result = document.getElementById("result");
+let music = document.getElementById("bgMusic");
 
 let moveCount = 0;
 let isFirstMove = true;
+
+/* Set music volume */
+music.volume = 0.4;
+
+/* START BUTTON CLICK */
+startBtn.addEventListener("click", function() {
+
+    music.play();                 // Start music
+    startBtn.style.display = "none";  // Hide start button
+    mainContent.style.display = "block"; // Show rest
+
+});
 
 /* Overlap detection */
 function isOverlapping(rect1, rect2) {
@@ -105,7 +145,6 @@ noBtn.addEventListener("mouseover", function() {
         showNoImage();
     }
 
-    /* On first move, switch to absolute but keep current position */
     if (isFirstMove) {
         let rect = noBtn.getBoundingClientRect();
 
@@ -145,15 +184,16 @@ yesBtn.addEventListener("click", function() {
     showYesImage();
 });
 
+/* Show images */
 function showNoImage() {
     result.innerHTML = `
-        <img src="no_puppy.jpg" alt="A sad puppy">
+        <img src="puppy_gun.jpg" alt="A sad puppy">
     `;
 }
 
 function showYesImage() {
     result.innerHTML = `
-        <img src="yes_puppy.jpg" alt="A happy puppy">
+        <img src="happy_puppy_dimitra.jpg" alt="A happy puppy">
     `;
 }
 
