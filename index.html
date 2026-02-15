@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
 <meta charset="UTF-8">
-<title>Valentine</title>
+<title>Quiz</title>
 
 <style>
 body {
@@ -14,11 +14,20 @@ body {
     overflow-x: hidden;
 }
 
-/* Initially hide main content */
+/* Hide main content initially */
 #mainContent {
     display: none;
 }
 
+/* Countdown styling */
+#countdown {
+    display: none;
+    font-size: 120px;
+    margin-top: 200px;
+    font-weight: bold;
+}
+
+/* Title */
 h1 {
     margin-top: 80px;
     font-size: 40px;
@@ -44,7 +53,7 @@ button {
     min-height: 55px;
 }
 
-/* Start button style */
+/* Start button */
 #startBtn {
     background-color: #28a745;
     color: white;
@@ -82,6 +91,9 @@ img {
 <!-- START BUTTON -->
 <button id="startBtn">Start</button>
 
+<!-- COUNTDOWN -->
+<div id="countdown"></div>
+
 <!-- MAIN CONTENT -->
 <div id="mainContent">
 
@@ -105,6 +117,7 @@ img {
 
 let startBtn = document.getElementById("startBtn");
 let mainContent = document.getElementById("mainContent");
+let countdownEl = document.getElementById("countdown");
 
 let noBtn = document.getElementById("noBtn");
 let yesBtn = document.getElementById("yesBtn");
@@ -114,16 +127,30 @@ let music = document.getElementById("bgMusic");
 let moveCount = 0;
 let isFirstMove = true;
 
-/* Set music volume */
 music.volume = 0.4;
 
 /* START BUTTON CLICK */
 startBtn.addEventListener("click", function() {
 
-    music.play();                 // Start music
-    startBtn.style.display = "none";  // Hide start button
-    mainContent.style.display = "block"; // Show rest
+    music.play();  // Start music
 
+    startBtn.style.display = "none";
+    countdownEl.style.display = "block";
+
+    let count = 3;
+    countdownEl.textContent = count;
+
+    let interval = setInterval(function() {
+        count--;
+        countdownEl.textContent = count;
+
+        if (count === 0) {
+            clearInterval(interval);
+            countdownEl.style.display = "none";
+            mainContent.style.display = "block";
+        }
+
+    }, 1000);
 });
 
 /* Overlap detection */
@@ -187,7 +214,7 @@ yesBtn.addEventListener("click", function() {
 /* Show images */
 function showNoImage() {
     result.innerHTML = `
-        <img src="puppy_gun.jpg" alt="A sad puppy">
+        <img src="water_pistol_puppy.png" alt="A sad puppy">
     `;
 }
 
