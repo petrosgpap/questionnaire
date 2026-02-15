@@ -14,20 +14,11 @@ body {
     overflow-x: hidden;
 }
 
-/* Hide main content initially */
+/* Initially hide main content */
 #mainContent {
     display: none;
 }
 
-/* Countdown styling */
-#countdown {
-    display: none;
-    font-size: 120px;
-    margin-top: 200px;
-    font-weight: bold;
-}
-
-/* Title */
 h1 {
     margin-top: 80px;
     font-size: 40px;
@@ -48,19 +39,17 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: left 0.25s ease, top 0.25s ease;
+    transition: left 0.25s ease, top 0.25s ease, transform 0.3s ease;
     min-width: 140px;
     min-height: 55px;
 }
 
-/* Start button */
 #startBtn {
     background-color: #28a745;
     color: white;
     margin-top: 200px;
 }
 
-/* Yes / No buttons */
 #yesBtn {
     background-color: #28a745;
     color: white;
@@ -83,20 +72,35 @@ img {
     display: block;
     margin: 20px auto;
 }
+
+/* Countdown style */
+#countdown {
+    font-size: 60px;
+    margin-top: 150px;
+    font-weight: bold;
+}
+
+/* Fireworks hearts */
+.heart {
+    position: fixed;
+    font-size: 24px;
+    animation: floatUp 3s linear forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-600px); opacity: 0; }
+}
 </style>
 </head>
 
 <body>
 
-<!-- START BUTTON -->
 <button id="startBtn">Start</button>
 
-<!-- COUNTDOWN -->
 <div id="countdown"></div>
 
-<!-- MAIN CONTENT -->
 <div id="mainContent">
-
     <h1>Δήμητρα, will you be my Valentine?</h1>
 
     <div class="buttons">
@@ -105,10 +109,8 @@ img {
     </div>
 
     <div id="result"></div>
-
 </div>
 
-<!-- Background Music -->
 <audio id="bgMusic" loop>
     <source src="Hawaii.mp3" type="audio/mpeg">
 </audio>
@@ -117,7 +119,7 @@ img {
 
 let startBtn = document.getElementById("startBtn");
 let mainContent = document.getElementById("mainContent");
-let countdownEl = document.getElementById("countdown");
+let countdown = document.getElementById("countdown");
 
 let noBtn = document.getElementById("noBtn");
 let yesBtn = document.getElementById("yesBtn");
@@ -129,29 +131,33 @@ let isFirstMove = true;
 
 music.volume = 0.4;
 
-/* START BUTTON CLICK */
+/* START BUTTON */
 startBtn.addEventListener("click", function() {
 
-    music.play();  // Start music
-
+    music.play();
     startBtn.style.display = "none";
-    countdownEl.style.display = "block";
 
     let count = 3;
-    countdownEl.textContent = count;
+    countdown.innerText = count;
 
     let interval = setInterval(function() {
         count--;
-        countdownEl.textContent = count;
-
-        if (count === 0) {
+        if (count > 0) {
+            countdown.innerText = count;
+        } else {
             clearInterval(interval);
-            countdownEl.style.display = "none";
+            countdown.style.display = "none";
             mainContent.style.display = "block";
         }
-
     }, 1000);
 });
+
+/* Funny texts (only first 3) */
+const funnyTexts = [
+    "Nice try 😏",
+    "Not today!",
+    "You really thought that would work?"
+];
 
 /* Overlap detection */
 function isOverlapping(rect1, rect2) {
@@ -168,17 +174,24 @@ noBtn.addEventListener("mouseover", function() {
 
     moveCount++;
 
-    if (moveCount === 3) {
+    // YES button grows
+    yesBtn.style.transform = "scale(" + (1 + moveCount * 0.1) + ")";
+
+    // Funny message (only first 4 attempts)
+    if (moveCount <= 4) {
+        result.innerHTML = "<p>" + funnyTexts[moveCount - 1] + "</p>";
+    }
+
+    // Show no image at 4th attempt
+    if (moveCount === 4) {
         showNoImage();
     }
 
     if (isFirstMove) {
         let rect = noBtn.getBoundingClientRect();
-
         noBtn.style.position = "absolute";
         noBtn.style.left = rect.left + "px";
         noBtn.style.top = rect.top + "px";
-
         isFirstMove = false;
     }
 
@@ -206,22 +219,41 @@ noBtn.addEventListener("mouseover", function() {
     } while (isOverlapping(noRect, yesRect) && tries < 100);
 });
 
-/* YES click */
+/* YES CLICK */
 yesBtn.addEventListener("click", function() {
     showYesImage();
+    launchHearts();
 });
 
 /* Show images */
 function showNoImage() {
     result.innerHTML = `
-        <img src="water_pistol_puppy.png" alt="A sad puppy">
+        <img src="water_pistol_puppy.png" alt="Sad puppy">
     `;
 }
 
 function showYesImage() {
     result.innerHTML = `
-        <img src="happy_puppy_dimitra.jpg" alt="A happy puppy">
+        <img src="happy_puppy_dimitra.jpg" alt="Happy puppy">
     `;
+}
+
+/* Fireworks hearts */
+function launchHearts() {
+    for (let i = 0; i < 30; i++) {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerText = "❤️";
+
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
+    }
 }
 
 </script>
